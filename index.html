@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda Online - Las Mejores Prendas</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Font Awesome para iconos (opcional, pero mejora la estética) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="container header-container">
+            <a href="#" class="logo">TuTienda</a>
+            
+            <input type="checkbox" id="menu-toggle" class="menu-toggle"/>
+            <label for="menu-toggle" class="menu-icon">
+                <img src="images/menu.png" alt="menu" class="menu-icon-img">
+            </label>
+            
+            <nav class="navbar">
+                <ul>
+                    <li><a href="#home">Inicio</a></li>
+                    <li><a href="#services">Servicios</a></li>
+                    <li><a href="#products-section">Productos</a></li>
+                    <li><a href="#contact">Contacto</a></li>
+                </ul>
+            </nav>
+            
+            <div class="cart-section">
+                <ul class="cart-menu">
+                    <li class="submenu">
+                        <i class="fas fa-shopping-cart" id="img-carrito"></i>
+                        <span id="cart-count" class="cart-count">0</span>
+                        <div id="carrito" class="cart-dropdown">
+                            <h4>Tu Carrito de Compras</h4>
+                            <table id="lista-carrito">
+                                <thead>
+                                    <tr>
+                                        <th>Imagen</th>
+                                        <th>Nombre</th>
+                                        <th>Precio</th>
+                                        <th>Cantidad</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Contenido del carrito se insertará aquí -->
+                                </tbody>
+                            </table>
+                            <p class="cart-total">Total: $<span id="total-price">0.00</span></p>
+                            <a href="#" id="vaciar-carrito" class="btn btn-secondary">Vaciar Carrito</a>
+                            <a href="pagos.html" class="btn btn-primary">Finalizar Compra</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="header-content container" id="home">
+            <div class="header-img">
+                <img src="images/right.png" alt="Ofertas Especiales">
+            </div>
+            <div class="header-txt">
+                <h1>Ofertas Especiales</h1>
+                <p>Estrena las mejores prendas con descuentos increíbles.</p>
+                <a href="#products-section" class="btn btn-primary">Ver Productos</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="offers container" id="services">
+        <div class="offer-item">
+            <div class="offer-img">
+                <img src="images/f1.png" alt="Producto 1">
+            </div>
+            <div class="offer-txt">
+                <h3>Producto Destacado 1</h3>
+                <p>Descripción breve del producto 1.</p>
+                <a href="#" class="btn btn-secondary">Más Información</a>
+            </div>
+        </div>
+
+        <div class="offer-item">
+            <div class="offer-img">
+                <img src="images/f2.png" alt="Producto 2">
+            </div>
+            <div class="offer-txt">
+                <h3>Producto Destacado 2</h3>
+                <p>Descripción breve del producto 2.</p>
+                <a href="#" class="btn btn-secondary">Más Información</a>
+            </div>
+        </div>
+
+        <div class="offer-item">
+            <div class="offer-img">
+                <img src="images/f3.png" alt="Producto 3">
+            </div>
+            <div class="offer-txt">
+                <h3>Producto Destacado 3</h3>
+                <p>Descripción breve del producto 3.</p>
+                <a href="#" class="btn btn-secondary">Más Información</a>
+            </div>
+        </div>
+    </section>
+
+    <main class="products-section container" id="products-section">
+        <h2>Nuestros Productos</h2>
+
+        <div class="product-grid" id="product-list">
+            <!-- Los productos se cargarán aquí dinámicamente o desde el HTML -->
+            <div class="product-card">
+                <img src="images/1.png" alt="Producto Elisyun 1">
+                <div class="product-info">
+                    <h3>Elisyun Camiseta</h3>
+                    <p class="quality">Calidad Premium</p>
+                    <p class="price">$20.00</p>
+                    <button class="add-to-cart-btn btn btn-primary" data-id="1">Agregar al Carrito</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="images/2.png" alt="Producto Elisyun 2">
+                <div class="product-info">
+                    <h3>Elisyun Pantalón</h3>
+                    <p class="quality">Calidad Premium</p>
+                    <p class="price">$35.00</p>
+                    <button class="add-to-cart-btn btn btn-primary" data-id="2">Agregar al Carrito</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="images/3.png" alt="Producto Elisyun 3">
+                <div class="product-info">
+                    <h3>Elisyun Chaqueta</h3>
+                    <p class="quality">Calidad Premium</p>
+                    <p class="price">$50.00</p>
+                    <button class="add-to-cart-btn btn btn-primary" data-id="3">Agregar al Carrito</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="images/4.png" alt="Producto Elisyun 4">
+                <div class="product-info">
+                    <h3>Elisyun Vestido</h3>
+                    <p class="quality">Calidad Premium</p>
+                    <p class="price">$45.00</p>
+                    <button class="add-to-cart-btn btn btn-primary" data-id="4">Agregar al Carrito</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="images/5.png" alt="Producto Elisyun 5">
+                <div class="product-info">
+                    <h3>Elisyun Zapatos</h3>
+                    <p class="quality">Calidad Premium</p>
+                    <p class="price">$60.00</p>
+                    <button class="add-to-cart-btn btn btn-primary" data-id="5">Agregar al Carrito</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="images/6.png" alt="Producto Elisyun 6">
+                <div class="product-info">
+                    <h3>Elisyun Gorra</h3>
+                    <p class="quality">Calidad Premium</p>
+                    <p class="price">$15.00</p>
+                    <button class="add-to-cart-btn btn btn-primary" data-id="6">Agregar al Carrito</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <section class="features container">
+        <div class="feature-item">
+            <div class="feature-icon">
+                <img src="images/i1.svg" alt="Envío Rápido">
+            </div>
+            <div class="feature-txt">
+                <h3>Envío Rápido y Seguro</h3>
+                <p>Recibe tus productos en tiempo récord.</p>
+            </div>
+        </div>
+
+        <div class="feature-item">
+            <div class="feature-icon">
+                <img src="images/i2.svg" alt="Soporte 24/7">
+            </div>
+            <div class="feature-txt">
+                <h3>Soporte al Cliente 24/7</h3>
+                <p>Estamos aquí para ayudarte en todo momento.</p>
+            </div>
+        </div>
+
+        <div class="feature-item">
+            <div class="feature-icon">
+                <img src="images/i3.svg" alt="Pagos Seguros">
+            </div>
+            <div class="feature-txt">
+                <h3>Pagos 100% Seguros</h3>
+                <p>Tu información está protegida con nosotros.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="blog-section container" id="blog">
+        <h2>Nuestro Blog</h2>
+        <div class="blog-grid">
+            <div class="blog-post">
+                <img src="images/b1.jpg" alt="Blog Post 1">
+                <h3>Tendencias de Moda 2024</h3>
+                <p>Descubre lo último en moda y cómo combinar tus prendas.</p>
+                <a href="#" class="btn btn-secondary">Leer Más</a>
+            </div>
+
+            <div class="blog-post">
+                <img src="images/b2.jpg" alt="Blog Post 2">
+                <h3>Guía de Tallas Perfecta</h3>
+                <p>Encuentra la talla ideal para cada tipo de prenda.</p>
+                <a href="#" class="btn btn-secondary">Leer Más</a>
+            </div>
+
+            <div class="blog-post">
+                <img src="images/b3.jpg" alt="Blog Post 3">
+                <h3>Cuidado de tus Prendas</h3>
+                <p>Consejos para mantener tu ropa como nueva por más tiempo.</p>
+                <a href="#" class="btn btn-secondary">Leer Más</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer" id="contact">
+        <div class="footer-content container">
+            <div class="footer-links">
+                <h3>Categorías</h3>
+                <ul>
+                    <li><a href="#">Ropa de Hombre</a></li>
+                    <li><a href="#">Ropa de Mujer</a></li>
+                    <li><a href="#">Accesorios</a></li>
+                    <li><a href="#">Ofertas</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-links">
+                <h3>Información</h3>
+                <ul>
+                    <li><a href="#">Sobre Nosotros</a></li>
+                    <li><a href="#">Política de Privacidad</a></li>
+                    <li><a href="#">Términos y Condiciones</a></li>
+                    <li><a href="#">Preguntas Frecuentes</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-links">
+                <h3>Mi Cuenta</h3>
+                <ul>
+                    <li><a href="#">Mi Pedido</a></li>
+                    <li><a href="#">Historial de Compras</a></li>
+                    <li><a href="#">Lista de Deseos</a></li>
+                    <li><a href="#">Iniciar Sesión</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-links">
+                <h3>Contacto</h3>
+                <ul>
+                    <li><a href="#">Dirección: Calle Falsa 123</a></li>
+                    <li><a href="#">Teléfono: +123 456 7890</a></li>
+                    <li><a href="#">Email: info@tutienda.com</a></li>
+                    <li><a href="#">Redes Sociales</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 TuTienda. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+    
+    <script src="script.js"></script>
+</body>
+</html>

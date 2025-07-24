@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Tienda de Ropa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .checkout-container {
+            font-family: 'Inter', sans-serif;
+            max-width: 1200px;
+        }
+        .payment-method {
+            transition: all 0.3s ease;
+        }
+        .payment-method:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .cart-item {
+            transition: transform 0.3s ease;
+        }
+        .cart-item:hover {
+            transform: translateY(-2px);
+        }
+        /* Custom scrollbar */
+        #items-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        #items-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        #items-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+        .hidden {
+            display: none;
+        }
+        .border-red-500 {
+            border-color: #ef4444;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="container mx-auto px-4 py-8 checkout-container">
+        <div class="flex flex-col md:flex-row gap-8">
+            <!-- Sección izquierda: Datos de envío y pago -->
+            <div class="md:w-2/3">
+                <!-- Logo y breadcrumb -->
+                <div class="mb-8">
+                    <h1 class="text-3xl font-bold text-indigo-600">Checkout</h1>
+                    <div class="flex items-center mt-2 text-gray-500">
+                        <span class="font-medium text-indigo-600">1. Carrito</span>
+                        <span class="mx-2">›</span>
+                        <span class="font-medium">2. Envío y Pago</span>
+                        <span class="mx-2">›</span>
+                        <span>3. Confirmación</span>
+                    </div>
+                </div>
+
+                <!-- Formulario de envío -->
+                <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                    <h2 class="text-xl font-semibold mb-4">Información de envío</h2>
+                    <form id="shipping-form">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-gray-700 mb-1">Nombres</label>
+                                <input type="text" name="firstName" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 mb-1">Apellidos</label>
+                                <input type="text" name="lastName" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <label class="block text-gray-700 mb-1">Dirección</label>
+                            <input type="text" name="address" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Calle, número, departamento" required>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                            <div>
+                                <label class="block text-gray-700 mb-1">Ciudad</label>
+                                <input type="text" name="city" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 mb-1">Región/Departamento</label>
+                                <select name="region" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required>
+                                    <option value="">Seleccionar</option>
+                                    <option>Lima</option>
+                                    <option>Arequipa</option>
+                                    <option>Cusco</option>
+                                    <option>Puno</option>
+                                    <option>La Libertad</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 mb-1">Código Postal</label>
+                                <input type="text" name="postalCode" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                            <div>
+                                <label class="block text-gray-700 mb-1">Correo electrónico</label>
+                                <input type="email" name="email" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 mb-1">Teléfono</label>
+                                <input type="tel" name="phone" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <label class="block text-gray-700 mb-1">Notas adicionales (opcional)</label>
+                            <textarea name="notes" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" rows="3" placeholder="Instrucciones especiales para la entrega"></textarea>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Métodos de pago -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h2 class="text-xl font-semibold mb-4">Método de pago</h2>
+                    
+                    <div class="space-y-4">
+                        <!-- Tarjeta de crédito -->
+                        <div class="payment-method p-4 border rounded-lg cursor-pointer hover:border-indigo-500" onclick="selectPayment('card')">
+                            <div class="flex items-center">
+                                <input type="radio" name="payment" id="card-payment" class="mr-3 h-5 w-5 text-indigo-600" checked>
+                                <label for="card-payment" class="block text-gray-700 font-medium">Tarjeta de crédito/débito</label>
+                                <div class="ml-auto flex space-x-2">
+                                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/260a4b47-efbf-4946-bcd5-e199815516f8.png" alt="Logo Visa - Tarjeta de crédito Visa" class="h-6">
+                                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/6cff4948-5fa2-4792-bc05-36755d54ed5a.png" alt="Logo Mastercard - Tarjeta de crédito Mastercard" class="h-6">
+                                </div>
+                            </div>
+                            <div id="card-fields" class="mt-4 pl-8">
+                                <div class="mb-4">
+                                    <label class="block text-gray-700 mb-1">Número de tarjeta</label>
+                                    <input type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="0000 0000 0000 0000">
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-gray-700 mb-1">Fecha de expiración</label>
+                                        <input type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="MM/AA">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 mb-1">Código CVV</label>
+                                        <input type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="000">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Yape/Plin -->
+                        <div class="payment-method p-4 border rounded-lg cursor-pointer hover:border-indigo-500" onclick="selectPayment('mobile')">
+                            <div class="flex items-center">
+                                <input type="radio" name="payment" id="mobile-payment" class="mr-3 h-5 w-5 text-indigo-600">
+                                <label for="mobile-payment" class="block text-gray-700 font-medium">Pago por Yape/Plin</label>
+                                <div class="ml-auto flex space-x-2">
+                                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/491db7fc-a181-4e72-9d01-ca404679406a.png" alt="Logo Yape - Billetera digital de crédito bancario" class="h-6">
+                                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/a1e52e26-517d-4252-b3f6-35b8fc96ada5.png" alt="Logo Plin - Billetera digital de crédito bancario" class="h-6">
+                                </div>
+                            </div>
+                            <div id="mobile-fields" class="mt-4 pl-8 hidden">
+                                <p class="text-gray-600 mb-3">Para pagar con Yape o Plin, use el siguiente número telefónico:</p>
+                                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3 text-center">
+                                    <p class="font-medium">+51 987 654 321</p>
+                                    <p class="text-sm text-gray-500">Válido por 24 horas</p>
+                                </div>
+                                <p class="text-gray-600 mt-3 text-sm">Por favor envíe una captura del comprobante al WhatsApp de la tienda con su número de pedido.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Pago contra entrega -->
+                        <div class="payment-method p-4 border rounded-lg cursor-pointer hover:border-indigo-500" onclick="selectPayment('cash')">
+                            <div class="flex items-center">
+                                <input type="radio" name="payment" id="cash-payment" class="mr-3 h-5 w-5 text-indigo-600">
+                                <label for="cash-payment" class="block text-gray-700 font-medium">Pago contra entrega</label>
+                                <div class="ml-auto">
+                                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/5fb78b91-7f46-41ae-b092-f2a20e28be10.png" alt="Icono de efectivo - Monedas y billetes para pago en persona" class="h-6">
+                                </div>
+                            </div>
+                            <div id="cash-fields" class="mt-4 pl-8 hidden">
+                                <p class="text-gray-600 mb-3">Pague en efectivo cuando reciba su pedido. Asegúrese de tener el monto exacto.</p>
+                                <div class="flex items-center text-sm text-gray-500">
+                                    <input type="checkbox" id="cash-change" class="mr-2">
+                                    <label for="cash-change">Necesitaré cambio para billetes grandes</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sección derecha: Resumen del pedido -->
+            <div class="md:w-1/3">
+                <div class="bg-white rounded-lg shadow-md sticky top-4">
+                    <!-- Carrito -->
+                    <div class="p-6 border-b">
+                        <h2 class="text-xl font-semibold mb-4">Tu pedido</h2>
+                        <div id="items-container" class="max-h-80 overflow-y-auto mb-4 space-y-4">
+                            <!-- Los productos del carrito se renderizarán aquí dinámicamente -->
+                        </div>
+                    </div>
+                    
+                    <!-- Resumen de compra -->
+                    <div class="p-6">
+                        <div class="flex justify-between mb-2">
+                            <span class="text-gray-600">Subtotal</span>
+                            <span class="font-medium" id="subtotal-price">S/0.00</span>
+                        </div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-gray-600">Envío</span>
+                            <span class="font-medium" id="shipping-price">S/0.00</span>
+                        </div>
+                        <div class="flex justify-between mb-4 border-b pb-2">
+                            <span class="text-gray-600">Descuento</span>
+                            <span class="font-medium text-red-500" id="discount-price">-S/0.00</span>
+                        </div>
+                        <div class="flex justify-between text-lg font-bold">
+                            <span>Total</span>
+                            <span id="total-final-price">S/0.00</span>
+                        </div>
+                        
+                        <!-- Términos y condiciones -->
+                        <div class="mt-6 text-sm text-gray-500">
+                            <input type="checkbox" id="terms" class="mr-2" required>
+                            <label for="terms">Acepto los <a href="#" class="text-indigo-600 hover:underline">Términos y Condiciones</a> y la <a href="#" class="text-indigo-600 hover:underline">Política de Privacidad</a></label>
+                        </div>
+                        
+                        <!-- Botón de pago -->
+                        <button id="pay-button" class="w-full mt-6 bg-indigo-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-indigo-700 transition duration-200">
+                            Completar compra
+                        </button>
+                        
+                        <!-- Métodos de pago alternativos -->
+                        <div class="mt-4 text-center">
+                            <p class="text-xs text-gray-500 mb-2">o pague con</p>
+                            <div class="flex justify-center space-x-4">
+                                <button class="p-2 border rounded-md hover:bg-gray-50">
+                                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/09f7de26-bcef-4996-97c2-8c45661c5d3a.png" alt="Logo PayPal - Pago electrónico seguro en línea" class="h-6">
+                                </button>
+                                <button class="p-2 border rounded-md hover:bg-gray-50">
+                                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/7a1bdd1f-30f9-449f-ad56-64f208d80475.png" alt="Logo Mercado Pago - Método de pago seguro digital" class="h-6">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Inicializar IndexedDB
+        const dbName = 'TiendaDB';
+        let db;
+        
+        // Abrir/Crear la base de datos
+        const request = indexedDB.open(dbName, 1);
+        
+        request.onupgradeneeded = function(e) {
+            const db = e.target.result;
+            
+            // Crear almacenes de objetos
+            if (!db.objectStoreNames.contains('productos')) {
+                db.createObjectStore('productos', { keyPath: 'id' });
+            }
+            
+            if (!db.objectStoreNames.contains('pedidos')) {
+                db.createObjectStore('pedidos', { keyPath: 'id' });
+            }
+            
+            // Agregar productos iniciales (si no existen)
+            const tx = e.target.transaction; // Usar la transacción del evento upgradeneeded
+            const store = tx.objectStore('productos');
+            
+            // Solo agregar si no hay datos, para evitar duplicados en cada actualización de versión
+            store.count().onsuccess = function(event) {
+                if (event.target.result === 0) {
+                    store.put({id: "1", name: "Elisyun Camiseta", price: 20.00, image: "images/1.png", quality: "Calidad Premium"});
+                    store.put({id: "2", name: "Elisyun Pantalón", price: 35.00, image: "images/2.png", quality: "Calidad Premium"});
+                    store.put({id: "3", name: "Elisyun Chaqueta", price: 50.00, image: "images/3.png", quality: "Calidad Premium"});
+                    store.put({id: "4", name: "Elisyun Vestido", price: 45.00, image: "images/4.png", quality: "Calidad Premium"});
+                    store.put({id: "5", name: "Elisyun Zapatos", price: 60.00, image: "images/5.png", quality: "Calidad Premium"});
+                    store.put({id: "6", name: "Elisyun Gorra", price: 15.00, image: "images/6.png", quality: "Calidad Premium"});
+                }
+            };
+        };
+
+        request.onsuccess = function(e) {
+            db = e.target.result;
+            cargarCarrito();
+        };
+
+        request.onerror = function(e) {
+            console.error("Error al abrir la base de datos", e);
+        };
+        
+        // Variables para manejar el carrito
+        let cart = [];
+        
+        // Cambiar métodos de pago
+        function selectPayment(method) {
+            document.getElementById('card-fields').classList.add('hidden');
+            document.getElementById('mobile-fields').classList.add('hidden');
+            document.getElementById('cash-fields').classList.add('hidden');
+            
+            document.getElementById(`${method}-fields`).classList.remove('hidden');
+            document.getElementById(`${method}-payment`).checked = true;
+        }
+        
+        // Actualizar cantidad de productos
+        function updateQuantity(button, change) {
+            const itemEl = button.closest('.cart-item');
+            const itemId = itemEl.dataset.id; // Usar dataset.id para obtener el id
+            const quantityElement = itemEl.querySelector('.item-quantity'); // Seleccionar el span de cantidad
+            
+            const item = cart.find(item => item.id === itemId);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity < 1) {
+                    item.quantity = 1; // No permitir cantidad menor a 1
+                }
+                quantityElement.textContent = item.quantity;
+                localStorage.setItem('cart', JSON.stringify(cart));
+                updateTotals();
+            }
+        }
+        
+        // Eliminar producto del carrito
+        function removeItem(button) {
+            const itemEl = button.closest('.cart-item');
+            const itemId = itemEl.dataset.id;
+            cart = cart.filter(item => item.id !== itemId);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            itemEl.remove(); // Eliminar el elemento del DOM
+            updateTotals();
+        }
+        
+        // Calcular totales
+        function calculateTotal() {
+            let subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            let shipping = subtotal > 200 ? 0 : 12.00; // Envío gratis > S/200
+            let discount = subtotal > 150 ? 10.00 : 0.00; // Descuento de S/10 > S/150
+            
+            return {
+                subtotal: subtotal,
+                shipping: shipping,
+                discount: discount,
+                total: subtotal + shipping - discount
+            };
+        }
+
+        // Actualizar la UI de los totales
+        function updateTotals() {
+            const totals = calculateTotal();
+            document.getElementById('subtotal-price').textContent = `S/${totals.subtotal.toFixed(2)}`;
+            document.getElementById('shipping-price').textContent = `S/${totals.shipping.toFixed(2)}`;
+            document.getElementById('discount-price').textContent = `-S/${totals.discount.toFixed(2)}`;
+            document.getElementById('total-final-price').textContent = `S/${totals.total.toFixed(2)}`;
+        }
+        
+        // Obtener datos de envío
+        function getShippingData() {
+            const form = document.getElementById('shipping-form');
+            return {
+                firstName: form.elements.firstName.value,
+                lastName: form.elements.lastName.value,
+                address: form.elements.address.value,
+                city: form.elements.city.value,
+                region: form.elements.region.value,
+                postalCode: form.elements.postalCode.value,
+                email: form.elements.email.value,
+                phone: form.elements.phone.value,
+                notes: form.elements.notes.value
+            };
+        }
+        
+        // Manejar el botón de pago
+        document.getElementById('pay-button').addEventListener('click', function() {
+            if (!document.getElementById('terms').checked) {
+                alert('Por favor acepte los términos y condiciones.');
+                return;
+            }
+            
+            // Validar campos requeridos
+            const shippingForm = document.getElementById('shipping-form');
+            const requiredFields = shippingForm.querySelectorAll('[required]');
+            let isValid = true;
+            
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.classList.add('border-red-500');
+                    isValid = false;
+                } else {
+                    field.classList.remove('border-red-500');
+                }
+            });
+            
+            if (!isValid) {
+                alert('Por favor complete todos los campos requeridos.');
+                return;
+            }
+
+            if (cart.length === 0) {
+                alert('Su carrito está vacío. Agregue productos antes de finalizar la compra.');
+                return;
+            }
+            
+            // Procesar pago según método seleccionado
+            const paymentMethod = document.querySelector('input[name="payment"]:checked').id.replace('-payment','');
+            
+            // Simular procesamiento
+            this.textContent = 'Procesando...';
+            this.disabled = true;
+
+            setTimeout(() => {
+                const orderId = 'ORD-' + Math.floor(Math.random() * 1000000);
+                const totals = calculateTotal();
+
+                const orderData = {
+                    id: orderId,
+                    items: cart,
+                    totals: totals,
+                    shippingInfo: getShippingData(),
+                    paymentMethod: paymentMethod,
+                    date: new Date().toISOString()
+                };
+                
+                // Guardar pedido en la base de datos
+                const tx = db.transaction('pedidos', 'readwrite');
+                const store = tx.objectStore('pedidos');
+                const addRequest = store.add(orderData);
+                
+                addRequest.onsuccess = function() {
+                    alert(`Pago procesado con éxito!\nNúmero de pedido: ${orderId}`);
+                    // Limpiar carrito
+                    cart = [];
+                    localStorage.removeItem('cart');
+                    window.location.href = "confirmacion.html?orderId=" + orderId; // Redirigir a página de confirmación
+                };
+
+                addRequest.onerror = function() {
+                    alert('Error al guardar el pedido. Por favor, intente de nuevo.');
+                    document.getElementById('pay-button').textContent = 'Completar compra';
+                    document.getElementById('pay-button').disabled = false;
+                };
+
+            }, 1500);
+        });
+        
+        // Cargar carrito desde localStorage
+        function cargarCarrito() {
+            const savedCart = localStorage.getItem('cart');
+            if (savedCart) {
+                cart = JSON.parse(savedCart);
+            } else {
+                cart = []; // Asegurarse de que el carrito esté vacío si no hay nada en localStorage
+            }
+            renderizarCarrito();
+        }
+
+        // Renderizar carrito en UI
+        function renderizarCarrito() {
+            const container = document.getElementById('items-container');
+            container.innerHTML = ''; // Limpiar el contenedor antes de renderizar
+            
+            if (cart.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-center py-4">Tu carrito está vacío.</p>';
+            } else {
+                cart.forEach(item => {
+                    const itemHTML = `
+                        <div class="cart-item flex justify-between items-start border-b pb-3" data-id="${item.id}">
+                            <div class="flex">
+                                <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded mr-3">
+                                <div>
+                                    <h3 class="font-medium text-gray-800">${item.name}</h3>
+                                    <p class="text-gray-500 text-sm">Precio: S/${item.price.toFixed(2)}</p>
+                                    <div class="flex items-center mt-1">
+                                        <button class="w-6 h-6 flex items-center justify-center border rounded-full text-gray-500 hover:bg-gray-100" onclick="updateQuantity(this, -1)">-</button>
+                                        <span class="mx-2 item-quantity">${item.quantity}</span>
+                                        <button class="w-6 h-6 flex items-center justify-center border rounded-full text-gray-500 hover:bg-gray-100" onclick="updateQuantity(this, 1)">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-medium">S/${(item.price * item.quantity).toFixed(2)}</p>
+                                <button class="text-red-500 text-sm hover:text-red-700" onclick="removeItem(this)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                    Eliminar
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    container.insertAdjacentHTML('beforeend', itemHTML);
+                });
+            }
+            updateTotals();
+        }
+        
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            // Asegurarse de que el método de pago por tarjeta esté seleccionado por defecto al cargar la página
+            document.getElementById('card-payment').checked = true;
+            document.getElementById('card-fields').classList.remove('hidden');
+            // Cargar el carrito al iniciar la página
+            cargarCarrito();
+        });
+    </script>
+</body>
+</html>
